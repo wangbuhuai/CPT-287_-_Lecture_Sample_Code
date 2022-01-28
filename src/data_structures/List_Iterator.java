@@ -7,7 +7,7 @@ package data_structures;
 
 import java.util.NoSuchElementException;
 
-public interface ListIterator<T> extends Iterator<T> {
+public interface List_Iterator<T> extends Iterator<T> {
     /** Tests whether there exists a previous element at current iterator position.
         @return: {true} if there exists a previous element at current iterator position; {false} otherwise
     */

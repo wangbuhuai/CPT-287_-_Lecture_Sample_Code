@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 /** An advanced array */
-public class ArrayList<T> implements Iterable<T> {
+public class Array_List<T> implements Iterable<T> {
     // Data fields
     private Object[] arr;  // A regular array to store the elements in the array list
     private int numOfElements;  // Number of elements stored in the array list
@@ -17,11 +17,11 @@ public class ArrayList<T> implements Iterable<T> {
 
     // Constructors
 
-    public ArrayList() { arr = new Object[DEFAULT_CAPACITY]; }  // Default constructor
+    public Array_List() { arr = new Object[DEFAULT_CAPACITY]; }  // Default constructor
 
-    public ArrayList(int capacity) { arr = new Object[capacity]; }  // Constructor with user-specified capacity
+    public Array_List(int capacity) { arr = new Object[capacity]; }  // Constructor with user-specified capacity
 
-    public ArrayList(ArrayList<T> other) {  // Copy constructor
+    public Array_List(Array_List<T> other) {  // Copy constructor
         arr = Arrays.copyOf(other.arr, other.arr.length);
         numOfElements = other.numOfElements;
     }
@@ -129,8 +129,8 @@ public class ArrayList<T> implements Iterable<T> {
         @return: a list iterator at the beginning of the array list
     */
     @Override
-    public ListIterator<T> iterator() {
-        return new ListIterator<T>() {
+    public List_Iterator<T> iterator() {
+        return new List_Iterator<T>() {
             // Data fields
             private int leftIndex = -1;  // Index of the left element at the current iterator position
             private int rightIndex = 0;  // Index of the right element at the current iterator position
@@ -219,7 +219,7 @@ public class ArrayList<T> implements Iterable<T> {
             */
             @Override
             public void add(T value) {
-                ArrayList.this.add(rightIndex, value);
+                Array_List.this.add(rightIndex, value);
                 next();
             }  // Average time complexity: O(n - rightIndex)
         };
