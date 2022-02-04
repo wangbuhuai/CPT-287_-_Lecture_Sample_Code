@@ -3,9 +3,9 @@
 // Last updated by Dayu Wang (dwang@stchas.edu) on 2022-01-28
 
 
-package hybrid_lecture_1;
+package hybrid.lecture_1;
 
-/** An array list in which elements have distinct values and are sorted non-decreasingly */
+/** An array list in which elements have distinct values and are sorted increasingly */
 public class Ordered_Array_List<T extends Comparable<T>> extends Array_List<T> {
     // Constructors
 
@@ -42,10 +42,9 @@ public class Ordered_Array_List<T extends Comparable<T>> extends Array_List<T> {
         throw new UnsupportedOperationException("Operation not supported in ordered array list.");
     }
 
-    /** Finds the index of the first occurrence of the specified element in the array list.
+    /** Finds the index of the specified element in the ordered array list.
         @param value: element to search for
-        @return: index of the first occurrence of the specified element in the array list,
-                 or {-1} if the array list does not contain the element
+        @return: index of the specified element in the list, or {-1} if the list does not contain the element
     */
     @Override
     public int indexOf(T value) {

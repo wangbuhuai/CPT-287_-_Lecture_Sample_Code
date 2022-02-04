@@ -1,9 +1,9 @@
 // Created by Dayu Wang (dwang@stchas.edu) on 2021-12-11
 
-// Last updated by Dayu Wang (dwang@stchas.edu) on 2021-12-11
+// Last updated by Dayu Wang (dwang@stchas.edu) on 2022-02-04
 
 
-package data_structures;
+package hybrid.lecture_2;
 
 import java.util.NoSuchElementException;
 
@@ -15,12 +15,12 @@ public interface List_Iterator<T> extends Iterator<T> {
 
     /** Moves the iterator backward and returns the element passed by.
         @return: element passed by in the iterator movement
-        @throws NoSuchElementException : there is not a previous element at current iterator position.
+        @throws NoSuchElementException: there is not a previous element at current iterator position.
     */
     T previous();
 
     /** Removes (and returns) the previous element at current iterator position.
-        @return: the element removed
+        @return: element removed
         @throws NoSuchElementException: there is not a previous element at current iterator position.
     */
     T removePrevious();

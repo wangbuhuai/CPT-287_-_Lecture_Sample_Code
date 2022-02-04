@@ -1,29 +1,37 @@
 // Created by Dayu Wang (dwang@stchas.edu) on 2021-12-11
 
-// Last updated by Dayu Wang (dwang@stchas.edu) on 2021-12-12
+// Last updated by Dayu Wang (dwang@stchas.edu) on 2022-02-04
 
 
-package data_structures;
+package hybrid.lecture_2;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-/** An advanced array */
+/** An advanced array with iterators */
 public class Array_List<T> implements Iterable<T> {
     // Data fields
-    private Object[] arr;  // A regular array to store the elements in the array list
-    private int numOfElements;  // Number of elements stored in the array list
-    private static final int DEFAULT_CAPACITY = 10;  // Default length of the regular array {arr}
+    private static final int DEFAULT_CAPACITY = 10;  // Default capacity for the regular array container
+    private int capacity;  // Max size of the regular array container
+    private int numOfItems;  // Number of elements stored in the array list
+    private Object[] data;  // Using a regular array to store array elements
 
     // Constructors
 
-    public Array_List() { arr = new Object[DEFAULT_CAPACITY]; }  // Default constructor
+    public Array_List() {  // Default constructor
+        capacity = DEFAULT_CAPACITY;
+        data = new Object[capacity];
+    }
 
-    public Array_List(int capacity) { arr = new Object[capacity]; }  // Constructor with user-specified capacity
+    public Array_List(int initialCapacity) {  // Constructor with user-specified capacity
+        capacity = initialCapacity;
+        data = new Object[capacity];
+    }
 
     public Array_List(Array_List<T> other) {  // Copy constructor
-        arr = Arrays.copyOf(other.arr, other.arr.length);
-        numOfElements = other.numOfElements;
+        capacity = other.capacity;
+        numOfItems = other.numOfItems;
+        data = Arrays.copyOf(other.data, other.capacity);  // Deep copy
     }
 
     // Methods
@@ -31,7 +39,7 @@ public class Array_List<T> implements Iterable<T> {
     /** Returns the number of elements in the array list.
         @return: number of elements in the array list
     */
-    public final int size() { return numOfElements; }  // Time complexity: O(1)
+    public final int size() { return numOfItems; }  // Time complexity: O(1)
 
     /** Tests whether the array list is empty.
         @return: {true} if the array list contains no elements; {false} otherwise
@@ -46,32 +54,35 @@ public class Array_List<T> implements Iterable<T> {
     @SuppressWarnings("unchecked")
     public final T get(int index) {
         if (index < 0 || index >= size()) { throw new IndexOutOfBoundsException("Index out of bounds: " + index); }
-        return (T)arr[index];
+        return (T)data[index];
     }  // Time complexity: O(1)
 
-    /** Replaces the element at the specified position in the array list with the specified element.
+    /** Replaces the element at the specified position in the array list with the specified value.
         @param index: index of the element to replace
         @param value: element to be stored at the specified position
         @throws IndexOutOfBoundsException: index is out of range (index < 0 or index >= size()).
     */
     public void set(int index, T value) {
         if (index < 0 || index >= size()) { throw new IndexOutOfBoundsException("Index out of bounds: " + index); }
-        arr[index] = value;
+        data[index] = value;
     }  // Time complexity: O(1)
 
-    /** Doubles the current capacity of the regular array {arr} without changing the elements stored in it. */
+    /** Doubles the current capacity of the regular array container without changing the elements stored in it. */
     private void reserve() {
-        Object[] newArr = new Object[2 * arr.length];
-        System.arraycopy(arr, 0, newArr, 0, size());
-        arr = newArr;
+        capacity = 2 * data.length;
+        Object[] newArr = new Object[capacity];
+        System.arraycopy(data, 0, newArr, 0, size());
+        data = newArr;
     }  // Time complexity: O(n)
 
     /** Appends the specified element to the end of the array list.
         @param value: element to be appended to the array list
+        @return: always {true}, representing the element successfully appended
     */
-    public void add(T value) {
-        if (size() == arr.length) { reserve(); }
-        arr[numOfElements++] = value;
+    public boolean add(T value) {
+        if (size() == capacity) { reserve(); }
+        data[numOfItems++] = value;
+        return true;
     }  // Average time complexity: O(1)
 
     /** Inserts the specified element at the specified position in the array list.
@@ -80,17 +91,10 @@ public class Array_List<T> implements Iterable<T> {
         @param value: element to be inserted
         @throws IndexOutOfBoundsException: index is out of range (index < 0 or index > size()).
     */
-    public void add(int index, T value) {
-        if (size() == arr.length) { reserve(); }
-        System.arraycopy(arr, index, arr, index + 1, numOfElements++ - index);
-        arr[index] = value;
-    }  // Time complexity: O(n)
-
-    /** Reduces the current capacity of the regular array {arr} by half without changing the elements stored in it. */
-    private void shrink() {
-        Object[] newArr = new Object[Math.max(arr.length / 2, DEFAULT_CAPACITY)];
-        System.arraycopy(arr,0, newArr, 0, size());
-        arr = newArr;
+    public void insert(int index, T value) {
+        if (size() == capacity) { reserve(); }
+        System.arraycopy(data, index, data, index + 1, numOfItems++ - index);
+        data[index] = value;
     }  // Time complexity: O(n)
 
     /** Removes the element at the specified position in the array list and shifts any subsequent elements to the left.
@@ -99,11 +103,10 @@ public class Array_List<T> implements Iterable<T> {
         @throws IndexOutOfBoundsException: index is out of range (index < 0 or index >= size()).
     */
     @SuppressWarnings("unchecked")
-    public T remove(int index) {
+    public final T remove(int index) {
         if (index < 0 || index >= size()) { throw new IndexOutOfBoundsException("Index out of bounds: " + index); }
-        T toBeRemoved = (T)arr[index];
-        System.arraycopy(arr, index + 1, arr, index, --numOfElements - index);
-        if (size() < arr.length / 2 && arr.length > DEFAULT_CAPACITY) { shrink(); }
+        T toBeRemoved = (T)data[index];
+        System.arraycopy(data, index + 1, data, index, --numOfItems - index);
         return toBeRemoved;
     }  // Average time complexity: O(n - index)
 
@@ -123,7 +126,20 @@ public class Array_List<T> implements Iterable<T> {
         @param value: element whose presence in the array list is to be tested
         @return: {true} if the array list contains the specified element; {false} otherwise
     */
-    public boolean contains(T value) { return indexOf(value) != -1; }  // Time complexity: O(n)
+    public final boolean contains(T value) { return indexOf(value) != -1; }  // Time complexity: O(n)
+
+    /** Customizes the output format of the array list.
+        @return: a string representing the output format of the array list
+    */
+    @Override
+    public final String toString() {
+        StringBuilder builder = new StringBuilder().append('[');
+        for (int i = 0; i < size(); i++) {
+            builder.append(data[i].toString());
+            if (i != size() - 1) { builder.append(", "); }
+        }
+        return builder.append(']').toString();
+    }  // Time complexity: O(n)
 
     /** Generates a list iterator at the beginning of the array list.
         @return: a list iterator at the beginning of the array list
@@ -151,14 +167,14 @@ public class Array_List<T> implements Iterable<T> {
 
             /** Moves the iterator forward and returns the element passed by.
                 @return: element passed by in the iterator movement
-                @throws NoSuchElementException: there is not a next element at current iterator position.
+                @throws NoSuchElementException : there is not a next element at current iterator position.
             */
             @Override
             @SuppressWarnings("unchecked")
             public T next() {
                 if (!hasNext()) { throw new NoSuchElementException(); }
                 leftIndex++;
-                return (T)arr[rightIndex++];
+                return (T)data[rightIndex++];
             }  // Time complexity: O(1)
 
             /** Moves the iterator backward and returns the element passed by.
@@ -170,7 +186,7 @@ public class Array_List<T> implements Iterable<T> {
             public T previous() {
                 if (!hasPrevious()) { throw new NoSuchElementException(); }
                 rightIndex--;
-                return (T)arr[leftIndex--];
+                return (T)data[leftIndex--];
             }  // Time complexity: O(1)
 
             /** Replaces the next element at current iterator position with the specified element.
@@ -180,7 +196,7 @@ public class Array_List<T> implements Iterable<T> {
             @Override
             public void setNext(T value) {
                 if (!hasNext()) { throw new NoSuchElementException(); }
-                arr[rightIndex] = value;
+                data[rightIndex] = value;
             }  // Time complexity: O(1)
 
             /** Replaces the previous element at current iterator position with the specified element.
@@ -190,11 +206,11 @@ public class Array_List<T> implements Iterable<T> {
             @Override
             public void setPrevious(T value) {
                 if (!hasPrevious()) { throw new NoSuchElementException(); }
-                arr[leftIndex] = value;
+                data[leftIndex] = value;
             }
 
             /** Removes (and returns) the next element at current iterator position.
-                @return: the element removed
+                @return: element removed
                 @throws NoSuchElementException: there is not a next element at current iterator position.
             */
             @Override
@@ -219,22 +235,9 @@ public class Array_List<T> implements Iterable<T> {
             */
             @Override
             public void add(T value) {
-                Array_List.this.add(rightIndex, value);
+                insert(rightIndex, value);
                 next();
             }  // Average time complexity: O(n - rightIndex)
         };
     }  // Time complexity: O(1)
-
-    /** Returns a string representation of the array list.
-        @return: a string representation of the array list
-    */
-    @Override
-    public String toString() {
-        StringBuilder out = new StringBuilder().append('[');
-        for (int i = 0; i < numOfElements; i++) {
-            out.append(get(i).toString());
-            if (i != numOfElements - 1) { out.append(", "); }
-        }
-        return out.append(']').toString();
-    }  // Time complexity: O(n)
 }

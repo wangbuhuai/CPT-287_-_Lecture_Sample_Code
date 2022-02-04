@@ -3,7 +3,7 @@
 // Last updated by Dayu Wang (dwang@stchas.edu) on 2021-12-11
 
 
-package data_structures;
+package hybrid.lecture_2;
 
 /** An iterable class can be iterated by iterators. */
 public interface Iterable<T> {

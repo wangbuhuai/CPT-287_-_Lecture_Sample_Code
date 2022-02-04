@@ -3,7 +3,7 @@
 // Last updated by Dayu Wang (dwang@stchas.edu) on 2022-01-28
 
 
-package hybrid_lecture_1;
+package hybrid.lecture_1;
 
 import java.util.Arrays;
 

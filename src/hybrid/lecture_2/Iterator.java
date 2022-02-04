@@ -1,9 +1,9 @@
 // Created by Dayu Wang (dwang@stchas.edu) on 2021-12-11
 
-// Last updated by Dayu Wang (dwang@stchas.edu) on 2021-12-11
+// Last updated by Dayu Wang (dwang@stchas.edu) on 2022-02-04
 
 
-package data_structures;
+package hybrid.lecture_2;
 
 import java.util.NoSuchElementException;
 
@@ -21,7 +21,7 @@ public interface Iterator<T> {
     T next();
 
     /** Removes (and returns) the next element at current iterator position.
-        @return: the element removed
+        @return: element removed
         @throws NoSuchElementException: there is not a next element at current iterator position.
     */
     T removeNext();
