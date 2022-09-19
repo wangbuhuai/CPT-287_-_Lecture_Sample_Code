@@ -1,9 +1,9 @@
-// Created by Dayu Wang (dwang@stchas.edu) on 2021-12-11
+// Created by Dayu Wang (dwang@stchas.edu) on 2022-08-31
 
 // Last updated by Dayu Wang (dwang@stchas.edu) on 2022-08-31
 
 
-package hybrid.lecture_1;
+package evening.lecture_2;
 
 import java.util.Arrays;
 
@@ -124,7 +124,7 @@ public class Array_List<T> {
     /** Tests whether the array list contains the specific element.
         @param value: element whose presence in the array list is to be tested
         @return: {true} if the array list contains the specified element; {false} otherwise
-    */
+     */
     public final boolean contains(T value) { return indexOf(value) != -1; }  // Time complexity: O(n)
 
     /** Customizes the output format of the array list.
